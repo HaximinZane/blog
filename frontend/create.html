@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatePost</title>
+</head>
+<body>
+    <h1>Create Post</h1>
+    <form id="create_form">
+        <label for="title">Title:
+        <input type="text" id="title" placeholder="Title">
+        </label>
+        <br>
+        <label for="summary">Summary:
+        <input type="text" id="summary" placeholder="Summary">
+        </label>
+        <br>
+        <label for="content">Content:
+        <textarea id="content" placeholder="Content"></textarea>
+        </label>
+        <br>
+        <label for="tags">Existing Tags:
+        <select multiple id="tags"></select>
+        </label>
+        <br>
+        <label for="new_tags">New Tags</label>
+        <input type="text" id="new_tags" placeholder="your new Tags (comma separated)">
+        <br>
+        <label for="status">Status:</label>
+        <select id="status">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+        </select>
+        <br>
+        <button type="submit" id="create_button">Create</button>
+    </form>
+    <div id="create_result"></div>
+    <script type="module" src="js/pages/create.js"></script>
+</body>
+</html>

@@ -42,3 +42,35 @@ export async function GetPost(id){
         throw error
     }
 }
+
+export async function CreatePost(postData){
+    try{
+        const response = await fetch(POST_PREFIX,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        });
+        if(!response.ok){
+            throw new Error(`Error create Post : ${response.status}`);
+        }
+        return response.json()
+    }
+    catch(error){
+        throw error
+    }
+}
+
+export async function ListTags(){
+    try{
+        const response = await fetch(BASE_URL+API_PREFIX+"/tags/");
+        if(!response.ok){
+            throw new Error(`Error get Tags : ${response.status}`);
+        }
+        return response.json()
+    }
+    catch(error){
+        throw error
+    }
+}

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
 load_dotenv()
-MODEL = os.getenv("LLM_MODEL")
+MODEL = os.environ["LLM_MODEL"]
 APIKEY = os.getenv("LLM_API_KEY")
 BASEURL = os.getenv("LLM_BASEURL")
 
@@ -13,8 +13,9 @@ class client:
         self.model = model or MODEL
         apikey = apikey or APIKEY
         baseurl = baseurl or BASEURL
+
         if not self.model or not apikey or not baseurl:
-            raise ValueError("lack the message of model")
+            raise RuntimeError("lack the message of model")
         self._client = AsyncOpenAI(
             api_key=apikey,
             base_url=baseurl,
@@ -33,28 +34,26 @@ class client:
             instructions=prompts["system"] or None,
             stream=True,
             reasoning={
-                "effort" : "high"
+                "effort" : "low"
             },
-            temperature=0.5
+            # temperature=0.5
         )
 
         output : list[str] = []
+        reasoning : list[str] = []    
+        info = {}    
         async for chunk in response:
             if chunk.type == "response.reasoning_text.delta":
-                print(chunk.delta,end='')
-            if chunk.type == "response.reasoning_text.done":
-                print("\n\n")
+                reasoning.append(chunk.delta)
             if chunk.type == "response.output_text.delta":
                 output.append(chunk.delta)
-                print(chunk.delta)
             if chunk.type == "response.completed":
                 final_res = chunk.response
                 usage = final_res.usage
                 model = final_res.model
                 status = final_res.status
-                print("\n\n")
-                print("统计：")
-                print("模型配置:", model)
-                print("响应状态:", status)
-                print("用量:", usage)
-            
+                info["model"] = model
+                info["status"] = status
+                info["usage"] = usage
+        return reasoning,output,info
+        
